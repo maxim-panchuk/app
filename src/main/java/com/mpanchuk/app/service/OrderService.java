@@ -4,7 +4,6 @@ package com.mpanchuk.app.service;
 import com.mpanchuk.app.domain.CityDistancePair;
 import com.mpanchuk.app.domain.OrderResponse;
 import com.mpanchuk.app.domain.StashPair;
-import com.mpanchuk.app.exception.NoSuchCityException;
 import com.mpanchuk.app.exception.PriceException;
 import com.mpanchuk.app.model.City;
 import com.mpanchuk.app.model.Coupon;
@@ -25,12 +24,12 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-    StashRepository stashRepository ;
-    CityRepository cityRepository ;
-    ItemRepository itemRepository ;
-    CouponRepository couponRepository ;
+    private final StashRepository stashRepository;
+    private final CityRepository cityRepository;
+    private final ItemRepository itemRepository;
+    private final CouponRepository couponRepository;
 
-    RouteFinder routeFinder ;
+    private final RouteFinder routeFinder;
 
     @Autowired
     public OrderService(StashRepository stashRepository,
@@ -38,24 +37,26 @@ public class OrderService {
                         ItemRepository itemRepository,
                         RouteFinder routeFinder,
                         CouponRepository couponRepository) {
-        this.stashRepository = stashRepository ;
-        this.cityRepository = cityRepository ;
-        this.itemRepository = itemRepository ;
-        this.routeFinder = routeFinder ;
-        this.couponRepository = couponRepository ;
+        this.stashRepository = stashRepository;
+        this.cityRepository = cityRepository;
+        this.itemRepository = itemRepository;
+        this.routeFinder = routeFinder;
+        this.couponRepository = couponRepository;
     }
 
     public OrderResponse makeOrder(String destination, String coupon) throws NoSuchElementException, PriceException {
-        if (!checkOrderSum()) { throw new PriceException() ;}
-
-        Optional<City> optionalCity = cityRepository.findByName(destination) ;
-        if (optionalCity.isEmpty()) {
-            throw new NoSuchElementException("city") ;
+        if (!checkOrderSum()) {
+            throw new PriceException();
         }
-        Optional<Coupon> cp = couponRepository.findByName(coupon) ;
-        City destinationCity = cityRepository.findByName(destination).orElseThrow() ;
-        List<StashPair<Item, Integer>> storage = stashRepository.getStorage() ;
-        HashMap<String, CityDistancePair<String, Integer>> itemToCity = new HashMap<>() ;
+
+        Optional<City> optionalCity = cityRepository.findByName(destination);
+        if (optionalCity.isEmpty()) {
+            throw new NoSuchElementException("city");
+        }
+        Optional<Coupon> cp = couponRepository.findByName(coupon);
+        City destinationCity = cityRepository.findByName(destination).orElseThrow();
+        List<StashPair<Item, Integer>> storage = stashRepository.getStorage();
+        HashMap<String, CityDistancePair<String, Integer>> itemToCity = new HashMap<>();
 
         for (StashPair<Item, Integer> pair : storage) {
             List<City> cities = itemRepository.findById(pair.getFirst().getId()).orElseThrow().getCities();
@@ -78,6 +79,6 @@ public class OrderService {
 
 
     private boolean checkOrderSum() {
-        return stashRepository.calcPrice() > 1000 ;
+        return stashRepository.calcPrice() > 1000;
     }
 }

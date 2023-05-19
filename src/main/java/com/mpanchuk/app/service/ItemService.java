@@ -23,16 +23,16 @@ public class ItemService {
 
     public Page<ItemResponse> getAllItems(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Item> entityItems = itemTestRepository.findAll(pageable) ;
+        Page<Item> entityItems = itemTestRepository.findAll(pageable);
         return entityItems.map(item -> new ItemResponse(item.getId(), item.getName(), item.getPrice()));
     }
 
     public Page<ItemResponse> getItemByRegexp(String regexp, int pageNo, int pageSize) {
         Page<Item> entityItems = itemTestRepository.findByNameLike(regexp, PageRequest.of(pageNo, pageSize)).orElseThrow();
-        return entityItems.map(item -> new ItemResponse(item.getId(), item.getName(), item.getPrice())) ;
+        return entityItems.map(item -> new ItemResponse(item.getId(), item.getName(), item.getPrice()));
     }
 
-    public Item getItemById(Long id) throws NoSuchElementException  {
+    public Item getItemById(Long id) throws NoSuchElementException {
         return itemTestRepository.findById(id).orElseThrow();
     }
 }

@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api/favourite")
 public class FavouriteController {
-    FavouriteService favouriteService ;
+    private final FavouriteService favouriteService ;
 
     @Autowired
     public FavouriteController(FavouriteService favouriteService) {

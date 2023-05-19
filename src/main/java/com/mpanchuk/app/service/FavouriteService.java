@@ -11,22 +11,24 @@ import java.util.NoSuchElementException;
 
 @Service
 public class FavouriteService {
-    ItemRepository itemRepository ;
-    FavouriteRepository favouriteRepository ;
+    private final ItemRepository itemRepository;
+    private final FavouriteRepository favouriteRepository;
 
     @Autowired
     public FavouriteService(ItemRepository itemRepository, FavouriteRepository favouriteRepository) {
-        this.itemRepository = itemRepository ;
-        this.favouriteRepository = favouriteRepository ;
+        this.itemRepository = itemRepository;
+        this.favouriteRepository = favouriteRepository;
     }
 
     public List<Item> getAll() {
         return this.favouriteRepository.getAll();
     }
+
     public List<Item> addItem(Long itemId) throws NoSuchElementException {
         Item item = itemRepository.findById(itemId).orElseThrow();
-        return favouriteRepository.addItem(item) ;
+        return favouriteRepository.addItem(item);
     }
+
     public List<Item> deleteItem(Long itemId) throws NoSuchElementException {
         Item item = itemRepository.findById(itemId).orElseThrow();
         return favouriteRepository.deleteItem(item);

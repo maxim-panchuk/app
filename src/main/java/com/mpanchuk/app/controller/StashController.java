@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/stash")
 public class StashController {
-    StashService stashService ;
+    private final StashService stashService ;
 
     @Autowired
     public StashController(StashService stashService) {
