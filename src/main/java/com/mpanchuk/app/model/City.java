@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,7 @@ public class City {
 
     @Column(name = "name", unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "cities")
+    private Set<Item> items;
 }

@@ -22,7 +22,7 @@ public class RouteFinder {
     public RouteFinder(GraphBuilder graphBuilder) {
         this.graphBuilder = graphBuilder ;
     }
-    public int[] findRoute(Long destinationId, List<City> from) {
+    public int[] findRoute(Long destinationId, Set<City> from) {
         int[][] matrix = makeMatrix(graphBuilder.getNodes());
         int[] routes = algorithm(Math.toIntExact(destinationId) - 1, matrix) ;
 

@@ -1,6 +1,7 @@
 package com.mpanchuk.app.controller;
 
-import com.mpanchuk.app.domain.ItemResponse;
+import com.mpanchuk.app.domain.request.ItemRequest;
+import com.mpanchuk.app.domain.response.ItemResponse;
 import com.mpanchuk.app.model.Item;
 import com.mpanchuk.app.service.ItemService;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class ItemController {
         if (item == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ItemResponse itemResponse = new ItemResponse(item.getId(), item.getName(), item.getPrice()) ;
+        ItemResponse itemResponse = new ItemResponse(item.getId(), item.getName(), item.getPrice());
 
         return new ResponseEntity<>(itemResponse, HttpStatus.OK);
     }
@@ -43,5 +44,16 @@ public class ItemController {
     public Page<ItemResponse> getItemByName(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize, @RequestParam String regexp) {
         logger.info("Getting item with regexp: " + regexp);
         return itemService.getItemByRegexp(regexp, pageNo, pageSize);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> addItem(@RequestBody ItemRequest request) {
+        itemService.addItemFromSupplier(request);
+        return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/manager")
+    public ResponseEntity<ItemResponse> getItem() {
+        var response = itemService.getItem();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

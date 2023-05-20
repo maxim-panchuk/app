@@ -1,7 +1,7 @@
 package com.mpanchuk.app.controller;
 
-import com.mpanchuk.app.domain.OrderRequest;
-import com.mpanchuk.app.domain.OrderResponse;
+import com.mpanchuk.app.domain.request.OrderRequest;
+import com.mpanchuk.app.domain.response.OrderResponse;
 import com.mpanchuk.app.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

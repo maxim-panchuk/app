@@ -2,7 +2,7 @@ package com.mpanchuk.app.service;
 
 
 import com.mpanchuk.app.domain.CityDistancePair;
-import com.mpanchuk.app.domain.OrderResponse;
+import com.mpanchuk.app.domain.response.OrderResponse;
 import com.mpanchuk.app.domain.StashPair;
 import com.mpanchuk.app.exception.PriceException;
 import com.mpanchuk.app.model.City;
@@ -16,10 +16,7 @@ import com.mpanchuk.app.util.graph.RouteFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -59,7 +56,7 @@ public class OrderService {
         HashMap<String, CityDistancePair<String, Integer>> itemToCity = new HashMap<>();
 
         for (StashPair<Item, Integer> pair : storage) {
-            List<City> cities = itemRepository.findById(pair.getFirst().getId()).orElseThrow().getCities();
+            Set<City> cities = itemRepository.findById(pair.getFirst().getId()).orElseThrow().getCities();
             int[] result = routeFinder.findRoute(destinationCity.getId(), cities);
             String cityNameFrom = cityRepository.findById((long) result[0]).orElseThrow().getName();
             if (result[1] > 1200) {

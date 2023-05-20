@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
-public class Item {
+public class Item implements Serializable {
+    private static final Long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +27,17 @@ public class Item {
     private String name;
 
     @Column(name = "price")
-    private int price;
+    private Integer price;
 
-    @Column(name = "cities")
     @ManyToMany
-    private List<City> cities ;
+    @JoinTable(
+            name = "item_cities",
+            joinColumns = @JoinColumn(
+                    name = "item_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "cities_id"
+            )
+    )
+    private Set<City> cities;
 }

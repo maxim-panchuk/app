@@ -1,5 +1,6 @@
-package com.mpanchuk.app.domain;
+package com.mpanchuk.app.domain.response;
 
+import com.mpanchuk.app.domain.CityDistancePair;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

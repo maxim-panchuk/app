@@ -1,4 +1,4 @@
-package com.mpanchuk.app.domain;
+package com.mpanchuk.app.domain.response;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.mpanchuk.app.domain;
+package com.mpanchuk.app.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

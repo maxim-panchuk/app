@@ -23,7 +23,7 @@ public class GraphBuilder {
 
     private List<Adjacency> refs;
     private HashMap<Long, ArrayList<Pair<Long, Integer>>> nodes;
-    private DistanceRepository distanceRepository ;
+    private final DistanceRepository distanceRepository ;
 
     @PostConstruct
     public void init() {

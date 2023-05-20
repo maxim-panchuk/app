@@ -1,9 +1,13 @@
 package com.mpanchuk.app.service;
 
-import com.mpanchuk.app.domain.ItemResponse;
+import com.mpanchuk.app.domain.request.ItemRequest;
+import com.mpanchuk.app.domain.response.ItemResponse;
+import com.mpanchuk.app.exception.NoSuchItemException;
+import com.mpanchuk.app.mapper.ItemMapper;
 import com.mpanchuk.app.model.Item;
 import com.mpanchuk.app.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mpanchuk.app.repository.SupplierRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,14 +16,12 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
 
     private final ItemRepository itemTestRepository;
-
-    @Autowired
-    public ItemService(ItemRepository itemTestRepository) {
-        this.itemTestRepository = itemTestRepository;
-    }
+    private final SupplierRepository supplierRepository;
+    private final ItemMapper mapper;
 
     public Page<ItemResponse> getAllItems(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -34,5 +36,15 @@ public class ItemService {
 
     public Item getItemById(Long id) throws NoSuchElementException {
         return itemTestRepository.findById(id).orElseThrow();
+    }
+
+    public void addItemFromSupplier(ItemRequest request) {
+        supplierRepository.addItemFromSupplier(mapper.toItem(request));
+    }
+
+    public ItemResponse getItem() {
+        return mapper.toResponse(supplierRepository
+                .getItemFromManager()
+                .orElseThrow(() -> new NoSuchItemException("Товары закончились!")));
     }
 }
