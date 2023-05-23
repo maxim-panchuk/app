@@ -5,8 +5,10 @@ import com.mpanchuk.app.exception.ItemToAddValidationException;
 import com.mpanchuk.app.exception.NoSuchCityException;
 import com.mpanchuk.app.exception.NoSuchItemException;
 import com.mpanchuk.app.exception.PriceException;
+import com.mpanchuk.app.exception.UsernameExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -32,12 +34,12 @@ public class ControllerAdvice {
 
     @ExceptionHandler(InvocationTargetException.class)
     public ResponseEntity<String> handleInvocationTargetException(InvocationTargetException ex) {
-        return new ResponseEntity<>("REQUEST BODY INVALID", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("request body invalid", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>("REQUEST BODY INVALID", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("illegal argument exception", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoSuchCityException.class)
@@ -58,5 +60,14 @@ public class ControllerAdvice {
     @ExceptionHandler(value = ItemToAddValidationException.class)
     public ResponseEntity<Object> handleItemToAddValidationExc(ItemToAddValidationException ex) {
         return new ResponseEntity<>(new ErrorMsg(HttpStatus.NOT_FOUND.toString(), ex.getMessage()), HttpStatus.NOT_FOUND);
+        
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
+        return new ResponseEntity<>("wrong password or username", HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = {UsernameExistsException.class})
+    public ResponseEntity<String> handleUsernameExistsException(UsernameExistsException ex) {
+        return new ResponseEntity<>("username already exists", HttpStatus.FORBIDDEN);
     }
 }

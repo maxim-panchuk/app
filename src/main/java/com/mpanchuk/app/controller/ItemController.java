@@ -27,7 +27,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Page<ItemResponse> getAllItems(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize) {
         return itemService.getAllItems(pageNo, pageSize);
     }

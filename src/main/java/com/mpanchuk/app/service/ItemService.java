@@ -31,6 +31,7 @@ public class ItemService {
     private final ItemToAddRepository itemToAddRepository;
     private final ItemToAddMapper itemToAddMapper;
     private final CityRepository cityRepository;
+    private final ItemRepository itemTestRepository;
     private final ItemMapper mapper;
 
     public Page<ItemResponse> getAllItems(int pageNo, int pageSize) {

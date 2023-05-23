@@ -21,17 +21,17 @@ public class StashService {
         this.stashRepository = stashRepository;
     }
 
-    public List<StashPair<Item, Integer>> addItem(Long itemId, int amount) throws NoSuchElementException {
+    public List<StashPair<Item, Integer>> addItem(String jwt, Long itemId, int amount) throws NoSuchElementException {
         Item item = itemRepository.findById(itemId).orElseThrow();
-        return stashRepository.addItem(item, amount);
+        return stashRepository.addItem(jwt, item, amount);
     }
 
-    public List<StashPair<Item, Integer>> deleteItem(Long itemId, int amount) throws NoSuchElementException {
+    public List<StashPair<Item, Integer>> deleteItem(String jwt, Long itemId, int amount) throws NoSuchElementException {
         Item item = itemRepository.findById(itemId).orElseThrow();
-        return stashRepository.deleteItem(item, amount);
+        return stashRepository.deleteItem(jwt, item, amount);
     }
 
-    public List<StashPair<Item, Integer>> getStash() {
-        return stashRepository.getStorage();
+    public List<StashPair<Item, Integer>> getStash(String jwt) {
+        return stashRepository.getStorage(jwt);
     }
 }

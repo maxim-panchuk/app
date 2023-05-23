@@ -22,7 +22,6 @@ public class City implements Serializable {
     @Column(name = "id")
     private Long id;
 
-
     @Column(name = "name", unique = true)
     private String name;
 
