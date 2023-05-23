@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/order")
 @Valid
-public class OrderController {
+public class OrderController implements SecuredRestController{
 
     private final OrderService orderService ;
 

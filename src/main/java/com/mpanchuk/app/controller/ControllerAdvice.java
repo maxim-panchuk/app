@@ -1,11 +1,7 @@
 package com.mpanchuk.app.controller;
 
 import com.mpanchuk.app.domain.ErrorMsg;
-import com.mpanchuk.app.exception.ItemToAddValidationException;
-import com.mpanchuk.app.exception.NoSuchCityException;
-import com.mpanchuk.app.exception.NoSuchItemException;
-import com.mpanchuk.app.exception.PriceException;
-import com.mpanchuk.app.exception.UsernameExistsException;
+import com.mpanchuk.app.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -60,7 +56,8 @@ public class ControllerAdvice {
     @ExceptionHandler(value = ItemToAddValidationException.class)
     public ResponseEntity<Object> handleItemToAddValidationExc(ItemToAddValidationException ex) {
         return new ResponseEntity<>(new ErrorMsg(HttpStatus.NOT_FOUND.toString(), ex.getMessage()), HttpStatus.NOT_FOUND);
-        
+    }
+
     @ExceptionHandler(value = {AuthenticationException.class})
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
         return new ResponseEntity<>("wrong password or username", HttpStatus.FORBIDDEN);
