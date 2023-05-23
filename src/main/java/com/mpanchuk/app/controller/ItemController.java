@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/item")
-public class ItemController {
+public class ItemController implements SecuredRestController{
 
     private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
     private final ItemService itemService;

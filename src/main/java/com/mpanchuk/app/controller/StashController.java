@@ -1,5 +1,6 @@
 package com.mpanchuk.app.controller;
 
+import com.mpanchuk.app.domain.response.StashResponse;
 import com.mpanchuk.app.model.Item;
 import com.mpanchuk.app.domain.StashPair;
 import com.mpanchuk.app.service.StashService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/stash")
-public class StashController {
+public class StashController implements SecuredRestController{
     private final StashService stashService ;
 
     @Autowired
@@ -23,17 +24,17 @@ public class StashController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<StashPair<Item, Integer>>> getStash(@NonNull HttpServletRequest request) {
-        List<StashPair<Item, Integer>> arr = stashService.getStash(getJwtString(request));
+    public ResponseEntity<List<StashResponse>> getStash(@NonNull HttpServletRequest request) {
+        var arr = stashService.getStash(getJwtString(request));
         if (arr == null) {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(arr, HttpStatus.OK) ;
     }
 
     @PutMapping("/add")
-    public ResponseEntity<List<StashPair<Item, Integer>>> addItem(@NonNull HttpServletRequest request, @RequestParam int itemId, @RequestParam(defaultValue = "1") int amount) {
-        List<StashPair<Item, Integer>> arr = stashService.addItem(getJwtString(request), (long) itemId, amount);
+    public ResponseEntity<List<StashResponse>> addItem(@NonNull HttpServletRequest request, @RequestParam int itemId, @RequestParam(defaultValue = "1") int amount) {
+        var arr = stashService.addItem(getJwtString(request), (long) itemId, amount);
         return new ResponseEntity<>(arr, HttpStatus.CREATED) ;
     }
 

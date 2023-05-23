@@ -4,6 +4,8 @@ import com.mpanchuk.app.domain.request.AuthenticationRequest;
 import com.mpanchuk.app.domain.request.RegisterRequest;
 import com.mpanchuk.app.domain.response.AuthenticationResponse;
 import com.mpanchuk.app.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
