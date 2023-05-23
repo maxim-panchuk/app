@@ -1,10 +1,8 @@
 package com.mpanchuk.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -15,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
+@Builder
 public class Item implements Serializable {
     private static final Long serialVersionUID = 1L;
 
@@ -39,5 +38,6 @@ public class Item implements Serializable {
                     name = "cities_id"
             )
     )
+    @JsonIgnoreProperties("items")
     private Set<City> cities;
 }

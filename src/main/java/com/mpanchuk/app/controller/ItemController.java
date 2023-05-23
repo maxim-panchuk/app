@@ -65,4 +65,12 @@ public class ItemController {
         var response = itemService.getItemsToAdd(pageNumber, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @PostMapping("/manager")
+    public ResponseEntity<List<ItemResponse>> addItemsFromManager(
+            @RequestBody List<Long> ids
+    ) {
+        var response = itemService.addItemsFromManager(ids);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

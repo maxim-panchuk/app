@@ -1,7 +1,11 @@
 package com.mpanchuk.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "item_to_add")
@@ -11,7 +15,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class ItemToAdd {
+public class ItemToAdd implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -23,7 +27,18 @@ public class ItemToAdd {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "city")
-    private String cityName;
+    @ManyToMany
+    @JoinTable(
+            name = "item_cities_to_add",
+            joinColumns = @JoinColumn(
+                    name = "item_to_add_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "cities_id"
+            )
+    )
+    @JsonIgnoreProperties("cities")
+    @ToString.Exclude
+    private Set<City> cities;
 
 }

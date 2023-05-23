@@ -2,6 +2,8 @@ package com.mpanchuk.app.domain.response;
 
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -11,5 +13,5 @@ public class ItemToAddResponse {
     private Long id;
     private String name;
     private int price;
-    private String city;
+    private Set<String> city;
 }

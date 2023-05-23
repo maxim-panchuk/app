@@ -1,6 +1,7 @@
 package com.mpanchuk.app.controller;
 
 import com.mpanchuk.app.domain.ErrorMsg;
+import com.mpanchuk.app.exception.ItemToAddValidationException;
 import com.mpanchuk.app.exception.NoSuchCityException;
 import com.mpanchuk.app.exception.NoSuchItemException;
 import com.mpanchuk.app.exception.PriceException;
@@ -51,6 +52,11 @@ public class ControllerAdvice {
 
     @ExceptionHandler(value = {NoSuchItemException.class})
     public ResponseEntity<Object> handeNoSuchItemExc(NoSuchItemException ex) {
+        return new ResponseEntity<>(new ErrorMsg(HttpStatus.NOT_FOUND.toString(), ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ItemToAddValidationException.class)
+    public ResponseEntity<Object> handleItemToAddValidationExc(ItemToAddValidationException ex) {
         return new ResponseEntity<>(new ErrorMsg(HttpStatus.NOT_FOUND.toString(), ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
