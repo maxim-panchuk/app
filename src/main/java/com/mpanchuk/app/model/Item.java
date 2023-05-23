@@ -1,5 +1,6 @@
 package com.mpanchuk.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,5 +40,6 @@ public class Item implements Serializable {
                     name = "cities_id"
             )
     )
+    @JsonIgnoreProperties("items")
     private Set<City> cities;
 }

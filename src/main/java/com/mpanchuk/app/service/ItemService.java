@@ -6,7 +6,6 @@ import com.mpanchuk.app.exception.NoSuchItemException;
 import com.mpanchuk.app.mapper.ItemMapper;
 import com.mpanchuk.app.model.Item;
 import com.mpanchuk.app.repository.ItemRepository;
-import com.mpanchuk.app.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +19,6 @@ import java.util.NoSuchElementException;
 public class ItemService {
 
     private final ItemRepository itemTestRepository;
-    private final SupplierRepository supplierRepository;
     private final ItemMapper mapper;
 
     public Page<ItemResponse> getAllItems(int pageNo, int pageSize) {
@@ -36,15 +34,5 @@ public class ItemService {
 
     public Item getItemById(Long id) throws NoSuchElementException {
         return itemTestRepository.findById(id).orElseThrow();
-    }
-
-    public void addItemFromSupplier(ItemRequest request) {
-        supplierRepository.addItemFromSupplier(mapper.toItem(request));
-    }
-
-    public ItemResponse getItem() {
-        return mapper.toResponse(supplierRepository
-                .getItemFromManager()
-                .orElseThrow(() -> new NoSuchItemException("Товары закончились!")));
     }
 }

@@ -24,7 +24,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Page<ItemResponse> getAllItems(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize) {
         return itemService.getAllItems(pageNo, pageSize);
     }
@@ -46,14 +46,14 @@ public class ItemController {
         return itemService.getItemByRegexp(regexp, pageNo, pageSize);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addItem(@RequestBody ItemRequest request) {
-        itemService.addItemFromSupplier(request);
-        return ResponseEntity.noContent().build();
-    }
-    @GetMapping("/manager")
-    public ResponseEntity<ItemResponse> getItem() {
-        var response = itemService.getItem();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> addItem(@RequestBody ItemRequest request) {
+//        itemService.addItemFromSupplier(request);
+//        return ResponseEntity.noContent().build();
+//    }
+//    @GetMapping("/manager")
+//    public ResponseEntity<ItemResponse> getItem() {
+//        var response = itemService.getItem();
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 }
