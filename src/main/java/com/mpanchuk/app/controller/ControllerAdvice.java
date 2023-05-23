@@ -60,6 +60,7 @@ public class ControllerAdvice {
     @ExceptionHandler(value = ItemToAddValidationException.class)
     public ResponseEntity<Object> handleItemToAddValidationExc(ItemToAddValidationException ex) {
         return new ResponseEntity<>(new ErrorMsg(HttpStatus.NOT_FOUND.toString(), ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
         
     @ExceptionHandler(value = {AuthenticationException.class})
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
