@@ -1,18 +1,22 @@
 package com.mpanchuk.app.service;
 
-import com.mpanchuk.app.domain.request.ItemRequest;
+import com.mpanchuk.app.domain.request.ItemToAddRequest;
 import com.mpanchuk.app.domain.response.ItemResponse;
-import com.mpanchuk.app.exception.NoSuchItemException;
-import com.mpanchuk.app.mapper.ItemMapper;
+import com.mpanchuk.app.domain.response.ItemToAddResponse;
+import com.mpanchuk.app.exception.ItemToAddValidationException;
+import com.mpanchuk.app.mapper.ItemToAddMapper;
 import com.mpanchuk.app.model.Item;
+import com.mpanchuk.app.repository.CityRepository;
 import com.mpanchuk.app.repository.ItemRepository;
-import com.mpanchuk.app.repository.SupplierRepository;
+import com.mpanchuk.app.repository.ItemToAddRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -20,8 +24,9 @@ import java.util.NoSuchElementException;
 public class ItemService {
 
     private final ItemRepository itemTestRepository;
-    private final SupplierRepository supplierRepository;
-    private final ItemMapper mapper;
+    private final ItemToAddRepository itemToAddRepository;
+    private final ItemToAddMapper itemToAddMapper;
+    private final CityRepository cityRepository;
 
     public Page<ItemResponse> getAllItems(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -38,13 +43,35 @@ public class ItemService {
         return itemTestRepository.findById(id).orElseThrow();
     }
 
-    public void addItemFromSupplier(ItemRequest request) {
-        supplierRepository.addItemFromSupplier(mapper.toItem(request));
+    /**
+     * SUPPLIER
+     */
+    @Transactional
+    public void addItemFromSupplier(List<ItemToAddRequest> request) {
+        request.forEach(it -> {
+            validateItemToAddRequest(it);
+            var entity = itemToAddMapper.toEntity(it);
+            itemToAddRepository.save(entity);
+        });
     }
 
-    public ItemResponse getItem() {
-        return mapper.toResponse(supplierRepository
-                .getItemFromManager()
-                .orElseThrow(() -> new NoSuchItemException("Товары закончились!")));
+
+    /**
+     * MANAGER
+     */
+    public Page<ItemToAddResponse> getItemsToAdd(Integer pageNumber, Integer pageSize) {
+        var pageable = PageRequest.of(pageNumber, pageSize);
+        var itemsToAdd = itemToAddRepository.findAll(pageable);
+        return itemsToAdd.map(itemToAddMapper::toResponse);
+    }
+
+
+    private void validateItemToAddRequest(ItemToAddRequest request) {
+        cityRepository.findByName(request.city()).orElseThrow(
+                () -> new ItemToAddValidationException(String.format("Города %s не существует!", request.city())));
+        if (request.price() < 0)
+            throw new ItemToAddValidationException(String.format("Цена не может быть меньше 0! %s", request.price()));
+        if (request.name() == null || request.name().equals(""))
+            throw new ItemToAddValidationException("Название товара не может быть пустым!");
     }
 }

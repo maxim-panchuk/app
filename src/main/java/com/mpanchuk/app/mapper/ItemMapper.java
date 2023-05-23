@@ -1,14 +1,14 @@
 package com.mpanchuk.app.mapper;
 
-import com.mpanchuk.app.domain.request.ItemRequest;
-import com.mpanchuk.app.domain.response.ItemResponse;
+import com.mpanchuk.app.domain.request.ItemToAddRequest;
+import com.mpanchuk.app.domain.response.ItemToAddResponse;
 import com.mpanchuk.app.model.Item;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ItemMapper {
 
-    public Item toItem(ItemRequest request) {
+    public Item toItem(ItemToAddRequest request) {
         Item item = new Item();
         if (request.name() != null)
             item.setName(request.name());
@@ -17,14 +17,14 @@ public class ItemMapper {
         return item;
     }
 
-    public ItemResponse toResponse(Item item) {
-        ItemResponse itemResponse = new ItemResponse();
+    public ItemToAddResponse toResponse(Item item) {
+        ItemToAddResponse itemToAddResponse = new ItemToAddResponse();
         if (item.getId() != null)
-            itemResponse.setId(item.getId());
+            itemToAddResponse.setId(item.getId());
         if (item.getPrice() != null)
-            itemResponse.setPrice(item.getPrice());
+            itemToAddResponse.setPrice(item.getPrice());
         if (item.getName() != null)
-            itemResponse.setName(item.getName());
-        return itemResponse;
+            itemToAddResponse.setName(item.getName());
+        return itemToAddResponse;
     }
 }

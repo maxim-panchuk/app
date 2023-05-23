@@ -1,10 +1,15 @@
 package com.mpanchuk.app.domain.response;
 
-import lombok.AllArgsConstructor;
+import lombok.*;
 
+@Getter
+@Setter
 @AllArgsConstructor
-public class ItemResponse {
+@NoArgsConstructor
+@Builder
+public class ItemToAddResponse {
     private Long id;
     private String name;
     private int price;
+    private String city;
 }

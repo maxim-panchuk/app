@@ -1,7 +1,8 @@
 package com.mpanchuk.app.controller;
 
-import com.mpanchuk.app.domain.request.ItemRequest;
+import com.mpanchuk.app.domain.request.ItemToAddRequest;
 import com.mpanchuk.app.domain.response.ItemResponse;
+import com.mpanchuk.app.domain.response.ItemToAddResponse;
 import com.mpanchuk.app.model.Item;
 import com.mpanchuk.app.service.ItemService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/item")
@@ -46,14 +49,20 @@ public class ItemController {
         return itemService.getItemByRegexp(regexp, pageNo, pageSize);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addItem(@RequestBody ItemRequest request) {
+    @PostMapping("/supplier")
+    public ResponseEntity<Void> addItem(@RequestBody List<ItemToAddRequest> request) {
         itemService.addItemFromSupplier(request);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/manager")
-    public ResponseEntity<ItemResponse> getItem() {
-        var response = itemService.getItem();
+    public ResponseEntity<Page<ItemToAddResponse>> getItem(
+            @RequestParam(defaultValue = "0")
+            Integer pageNumber,
+            @RequestParam(defaultValue = "10")
+            Integer pageSize
+    ) {
+        var response = itemService.getItemsToAdd(pageNumber, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
