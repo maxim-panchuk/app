@@ -7,16 +7,15 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "item_to_add")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "item")
+@Getter
+@Setter
+@ToString
 @Builder
-public class Item implements Serializable {
-    private static final Long serialVersionUID = 1L;
-
+public class ItemToAdd implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,14 +29,16 @@ public class Item implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "item_cities",
+            name = "item_cities_to_add",
             joinColumns = @JoinColumn(
-                    name = "item_id"
+                    name = "item_to_add_id"
             ),
             inverseJoinColumns = @JoinColumn(
                     name = "cities_id"
             )
     )
-    @JsonIgnoreProperties("items")
+    @JsonIgnoreProperties("cities")
+    @ToString.Exclude
     private Set<City> cities;
+
 }

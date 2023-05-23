@@ -28,4 +28,8 @@ public class City implements Serializable {
     @ManyToMany(mappedBy = "cities")
     @JsonIgnoreProperties("cities")
     private Set<Item> items;
+
+    @ManyToMany(mappedBy = "cities")
+    @JsonIgnoreProperties("cities")
+    private Set<ItemToAdd> itemToAdds;
 }
