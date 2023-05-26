@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,17 +28,19 @@ public class OrderController implements SecuredRestController{
 
     @PostMapping("/")
     public ResponseEntity<OrderResponse> makeOrder(
-            @NonNull HttpServletRequest request,
             @Valid @RequestBody OrderRequest orderRequest) throws Exception {
-        OrderResponse resp = orderService.makeOrder(getJwtString(request), orderRequest.getCity(), orderRequest.getCoupon());
+        OrderResponse resp = orderService.makeOrder(getUsername(), orderRequest.getCity(), orderRequest.getCoupon());
         if (resp == null) {
             return new ResponseEntity<>(OrderResponse.builder().message("Сумма заказа должна быть больше 1000").build(), HttpStatus.OK) ;
         }
-        return new ResponseEntity<>(orderService.makeOrder(getJwtString(request), orderRequest.getCity(), orderRequest.getCoupon()), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.makeOrder(getUsername(), orderRequest.getCity(), orderRequest.getCoupon()), HttpStatus.OK);
     }
 
-    private String getJwtString(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authorization");
-        return authHeader.substring(7);
+    private String getUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof UserDetails userDetails) {
+            return userDetails.getUsername();
+        }
+        return "" ;
     }
 }

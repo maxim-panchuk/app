@@ -24,6 +24,8 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/api/item/manager").hasAuthority("ADMIN")
+                .requestMatchers("/api/item/supplier").hasAuthority("SUPPLIER")
                 .requestMatchers("/api/auth/**", "/api/item/**", "/swagger-ui/**","/v3/api-docs/**")
                 .permitAll()
                 .anyRequest()

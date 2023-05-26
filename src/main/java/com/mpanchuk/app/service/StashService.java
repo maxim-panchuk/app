@@ -30,9 +30,9 @@ public class StashService {
         return mapper(stash);
     }
 
-    public List<StashPair<Item, Integer>> deleteItem(String jwt, Long itemId, int amount) throws NoSuchElementException {
+    public List<StashResponse> deleteItem(String username, Long itemId, int amount) throws NoSuchElementException {
         Item item = itemRepository.findById(itemId).orElseThrow();
-        return stashRepository.deleteItem(jwt, item, amount);
+        return mapper(stashRepository.deleteItem(username, item, amount));
     }
 
     private List<StashResponse> mapper(List<StashPair<Item, Integer>> stashPair) {
@@ -48,8 +48,8 @@ public class StashService {
         return stashResponses;
     }
 
-    public List<StashResponse> getStash(String jwt) {
-        var stash = stashRepository.getStorage(jwt);
+    public List<StashResponse> getStash(String username) {
+        var stash = stashRepository.getStorage(username);
         return mapper(stash);
     }
 }

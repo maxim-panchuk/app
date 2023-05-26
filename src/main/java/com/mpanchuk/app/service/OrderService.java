@@ -45,9 +45,8 @@ public class OrderService {
         this.jwtService = jwtService;
     }
 
-    public OrderResponse makeOrder(String jwt, String destination, String coupon) throws NoSuchElementException, PriceException {
-        String username = getUsername(jwt);
-        if (!checkOrderSum(jwt)) {
+    public OrderResponse makeOrder(String username, String destination, String coupon) throws NoSuchElementException, PriceException {
+        if (!checkOrderSum(username)) {
             throw new PriceException();
         }
 
@@ -57,7 +56,7 @@ public class OrderService {
         }
         Optional<Coupon> cp = couponRepository.findByName(coupon);
         City destinationCity = cityRepository.findByName(destination).orElseThrow();
-        List<StashPair<Item, Integer>> storage = stashRepository.getStorage(jwt);
+        List<StashPair<Item, Integer>> storage = stashRepository.getStorage(username);
         HashMap<String, CityDistancePair<String, Integer>> itemToCity = new HashMap<>();
 
         for (StashPair<Item, Integer> pair : storage) {
@@ -71,7 +70,7 @@ public class OrderService {
         }
 
 
-        int price = stashRepository.calcPrice(jwt);
+        int price = stashRepository.calcPrice(username);
         if (cp.isEmpty()) {
             return new OrderResponse(itemToCity, destination, price, 0, price, "Без купона");
         }
@@ -79,11 +78,7 @@ public class OrderService {
         return new OrderResponse(itemToCity, destination, price, discount, price - discount, "Купон применен");
     }
 
-    private String getUsername(String jwt) {
-        return jwtService.extractUsername(jwt);
-    }
-
-    private boolean checkOrderSum(String jwt) {
-        return stashRepository.calcPrice(jwt) > 1000;
+    private boolean checkOrderSum(String username) {
+        return stashRepository.calcPrice(username) > 1000;
     }
 }

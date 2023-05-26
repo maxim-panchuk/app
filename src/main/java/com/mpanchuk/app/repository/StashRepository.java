@@ -15,11 +15,7 @@ public class StashRepository {
     // username - list<stash_pair>>
     Map<String, List<StashPair<Item, Integer>>> storage = new HashMap<>();
 
-    @Autowired
-    JwtService jwtService;
-
-    public List<StashPair<Item, Integer>> addItem(String jwt, Item item, int amount) {
-        String username = getUsername(jwt);
+    public List<StashPair<Item, Integer>> addItem(String username, Item item, int amount) {
         List<StashPair<Item, Integer>> userStash = storage.getOrDefault(username, null) ;
         if (userStash == null) {
             userStash = new ArrayList<StashPair<Item, Integer>>();
@@ -42,8 +38,7 @@ public class StashRepository {
 
         return storage.getOrDefault(username, null);
     }
-    public List<StashPair<Item, Integer>> deleteItem(String jwt, Item item, int amount) {
-        String username = getUsername(jwt);
+    public List<StashPair<Item, Integer>> deleteItem(String username, Item item, int amount) {
         List<StashPair<Item, Integer>> stashPairList = storage.getOrDefault(username, null);
 
         if (stashPairList == null) {
@@ -70,18 +65,16 @@ public class StashRepository {
             pair.setSecond(newAmount);
         }
 
-        storage.put(username, stashPairList);
+        ///storage.put(username, stashPairList);
 
         return stashPairList;
     }
 
-    public List<StashPair<Item, Integer>> getStorage(String jwt) {
-        String username = getUsername(jwt);
+    public List<StashPair<Item, Integer>> getStorage(String username) {
         return storage.getOrDefault(username, null);
     }
 
-    public int calcPrice(String jwt) {
-        String username = getUsername(jwt);
+    public int calcPrice(String username) {
         List<StashPair<Item, Integer>> stashPairList = storage.getOrDefault(username, null);
         if (stashPairList == null) {
             return 0;
@@ -91,9 +84,5 @@ public class StashRepository {
                 .mapToInt(pair -> pair.getFirst().getPrice() * pair.getSecond())
                 .sum();
 
-    }
-
-    private String getUsername(String jwt) {
-        return jwtService.extractUsername(jwt);
     }
 }
