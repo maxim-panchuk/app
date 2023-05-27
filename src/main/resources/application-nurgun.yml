@@ -4,9 +4,13 @@ spring:
     username: postgres
     password:
     driver-class-name: org.postgresql.Driver
+  jta:
+    atomikos:
+      datasource:
+        unique-resource-name: t293jg2598g204jg034
   jpa:
     hibernate:
-      #ddl-auto: create
+    #      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
